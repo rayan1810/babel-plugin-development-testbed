@@ -1,13 +1,14 @@
-import Image from "next/image";
-import { Inter } from "next/font/google";
-import Editor from "react-simple-code-editor";
-import { highlight, languages } from "prismjs/components/prism-core";
-import "prismjs/components/prism-clike";
-import "prismjs/components/prism-javascript";
-import "prismjs/themes/prism-dark.css";
-import { use, useEffect, useState } from "react";
+import Image from 'next/image';
+import { Inter } from 'next/font/google';
+import Editor from 'react-simple-code-editor';
+// @ts-ignore
+import { highlight, languages } from 'prismjs/components/prism-core';
+import 'prismjs/components/prism-clike';
+import 'prismjs/components/prism-javascript';
+import 'prismjs/themes/prism-dark.css';
+import { use, useEffect, useState } from 'react';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
   const [inputCode, setInputCode] = useState(
@@ -47,20 +48,28 @@ export default function App() {
     >
       <h1 className="text-4xl font-bold">Babel Test</h1>
       <p className="text-lg">
-        To test your babel plugin, update the babel plugin in{" "}
+        To test your babel plugin, update the babel plugin in{' '}
         <code className="font-mono bg-slate-800 p-1">pages/index.tsx</code>
       </p>
+      <button
+        onClick={async () => {
+          setOutputCode('');
+          const res = await fetch('/api/hello', {
+            method: 'POST',
+            body: inputCode,
+          });
+          const data = await res.json();
+          setOutputCode(data.code.code);
+        }}
+        className="p-4 bg-slate-500 text-gray-200"
+      >
+        Parse Now
+      </button>
       <div className="flex flex-row flex-1 w-full gap-3">
         <Editor
           value={inputCode}
           onValueChange={async (code) => {
             setInputCode(code);
-            const res = await fetch("/api/hello", {
-              method: "POST",
-              body: code,
-            });
-            const data = await res.json();
-            setOutputCode(data.code.code);
           }}
           highlight={(code) => highlight(code, languages.js)}
           padding={10}
@@ -68,14 +77,14 @@ export default function App() {
           style={{
             fontFamily: '"Fira code", "Fira Mono", monospace',
             fontSize: 12,
-            overflow: "scroll",
+            overflow: 'scroll',
           }}
         />
 
         <Editor
           value={outputCode}
           onValueChange={(code) => {
-            setOutputCode(code);
+            // setOutputCode(code);
           }}
           highlight={(code) => highlight(code, languages.js)}
           padding={10}
@@ -83,7 +92,7 @@ export default function App() {
           style={{
             fontFamily: '"Fira code", "Fira Mono", monospace',
             fontSize: 12,
-            overflow: "scroll",
+            overflow: 'scroll',
           }}
         />
       </div>
